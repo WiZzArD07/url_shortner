@@ -1,0 +1,31 @@
+# Node modules (will be installed inside container)
+node_modules
+
+# Git
+.git
+.gitignore
+
+# Env files
+.env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode
+
+# Docker files (avoid nesting issues)
+docker-compose.yml
+
+# Temporary files
+tmp
+temp
+
+# Coverage / build
+coverage
+dist
+build
