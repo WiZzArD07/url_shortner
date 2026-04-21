@@ -1,25 +1,16 @@
-const { createClient } = require("redis");
+const Redis = require("ioredis");
 
 let client;
 
-async function connectRedis() {
+function connectRedis() {
   try {
     if (!process.env.REDIS_URL) {
       console.log("No Redis URL provided");
       return;
     }
 
-    client = createClient({
-      url: process.env.REDIS_URL,
-      socket: {
-        tls: true,                 
-        keepAlive: 5000,
-        reconnectStrategy: (retries) => Math.min(retries * 50, 500),
-      },
-    });
-
-    client.on("error", (err) => {
-      console.error("Redis Error:", err.message);
+    client = new Redis(process.env.REDIS_URL, {
+      tls: {}, //Upstash requires TLS
     });
 
     client.on("connect", () => {
@@ -30,7 +21,9 @@ async function connectRedis() {
       console.log("Redis Connected");
     });
 
-    await client.connect();
+    client.on("error", (err) => {
+      console.error("Redis Error:", err.message);
+    });
 
   } catch (err) {
     console.error("Redis failed:", err.message);
