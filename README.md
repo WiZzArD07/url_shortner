@@ -252,7 +252,7 @@ Cache HIT: abc123
 
 ---
 
-## 🔐 License
+##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
