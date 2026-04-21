@@ -5,20 +5,18 @@ let client;
 function connectRedis() {
   try {
     if (!process.env.REDIS_URL) {
-      console.log("No Redis URL provided");
+      console.log("⚠️ No Redis URL provided");
       return;
     }
 
-    client = new Redis(process.env.REDIS_URL, {
-      tls: {}, //Upstash requires TLS
-    });
+    client = new Redis(process.env.REDIS_URL); // ✅ no tls
 
     client.on("connect", () => {
       console.log("🔌 Redis connecting...");
     });
 
     client.on("ready", () => {
-      console.log("Redis Connected");
+      console.log("✅ Redis Connected");
     });
 
     client.on("error", (err) => {
@@ -26,7 +24,7 @@ function connectRedis() {
     });
 
   } catch (err) {
-    console.error("Redis failed:", err.message);
+    console.error("❌ Redis failed:", err.message);
   }
 }
 
