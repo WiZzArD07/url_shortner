@@ -5,6 +5,12 @@ Designed with production-grade patterns including caching, retry mechanisms, and
 
 ---
 
+##  Live Demo
+
+ https://url-shortner-4nlz.onrender.com
+
+---
+
 ##  Repository Description
 
 Production-ready URL shortener built with Node.js, MySQL, and Redis. Features include Dockerized architecture, auto DB initialization, caching layer, and resilient service startup with retry logic.
