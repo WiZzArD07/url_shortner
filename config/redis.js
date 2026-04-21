@@ -4,26 +4,29 @@ let client;
 
 async function connectRedis() {
   try {
-    //  If no Redis URL → skip (safe for production)
     if (!process.env.REDIS_URL) {
-      console.log("Redis not configured, skipping...");
+      console.log("⚠️ No Redis URL provided");
       return;
     }
 
     client = createClient({
-      url: process.env.REDIS_URL,   //  IMPORTANT
+      url: process.env.REDIS_URL,
+      socket: {
+        tls: true,
+        rejectUnauthorized: false, 
+      },
     });
 
     client.on("error", (err) => {
-      console.log("Redis Error:", err);
+      console.error("Redis Error:", err.message);
     });
 
     await client.connect();
 
-    console.log("Redis Connected");
+    console.log("✅ Redis Connected");
 
   } catch (err) {
-    console.log("Redis failed, continuing without cache...");
+    console.error("❌ Redis failed:", err.message);
   }
 }
 
