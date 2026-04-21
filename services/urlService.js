@@ -1,45 +1,6 @@
 const { client }  = require("../config/redis");
 const { db } = require("../config/db");
 
-// exports.getLongUrl = async (shortCode) => {
-
-//   // console.log("Checking Redis for:", shortCode);
-//   db().query("UPDATE urls SET clicks = clicks + 1 WHERE short_code=?", [shortCode]);
-
-//   //  Check Redis
-//   const cached = await redisClient.get(shortCode);
-
-//   if (cached) {
-//     console.log("Cache HIT:", shortCode);
-//     return cached;
-//   }
-
-//   console.log("Cache MISS:", shortCode);
-
-//   // Fetch from DB
-//   return new Promise((resolve, reject) => {
-//     const query = "SELECT long_url FROM urls WHERE short_code=?";
-
-//     db().query(query, [shortCode], async (err, results) => {
-//       if (err) return reject(err);
-
-//       if (results.length === 0) {
-//         console.log("Not found in DB");
-//         return resolve(null);
-//       }
-
-//       const longUrl = results[0].long_url;
-
-//       console.log("Storing in Redis:", shortCode);
-
-//       //  Store in Redis
-//       await redisClient.setEx(shortCode, 3600, longUrl);
-
-//       resolve(longUrl);
-//     });
-//   });
-// };
-
 exports.getLongUrl = async (shortCode) => {
   try {
     //  increment clicks safely
