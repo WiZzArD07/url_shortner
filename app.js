@@ -10,7 +10,7 @@ app.use(express.json());
 const urlRoutes = require("./routes/urlRoutes");
 app.use("/", urlRoutes);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Start server ONLY after DB + Redis ready
 async function startServer() {

@@ -7,20 +7,23 @@ function connectDB() {
 
     const tryConnect = () => {
 
-      //  create NEW connection each time
-      db = mysql.createConnection({
-        host: process.env.DB_HOST || "db",
-        user: process.env.DB_USER || "root",
-        password: process.env.DB_PASSWORD || "",
-        database: process.env.DB_NAME || "url_shortener",
+      db = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        port: process.env.DB_PORT || 3306,
+        waitForConnections: true,
+        connectionLimit: 10,
       });
 
-      db.connect((err) => {
+      db.getConnection((err, connection) => {
         if (err) {
           console.log("DB not ready, retrying in 3 sec...");
           setTimeout(tryConnect, 3000);
         } else {
           console.log("MySQL Connected");
+          connection.release();
           resolve();
         }
       });

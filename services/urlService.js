@@ -3,7 +3,6 @@ const { db } = require("../config/db");
 
 exports.getLongUrl = async (shortCode) => {
   try {
-    //  increment clicks safely
     db().query(
       "UPDATE urls SET clicks = clicks + 1 WHERE short_code=?",
       [shortCode],
@@ -12,12 +11,14 @@ exports.getLongUrl = async (shortCode) => {
       }
     );
 
-    // check Redis
     let cached;
-    try {
-      cached = await client().get(shortCode);
-    } catch (err) {
-      console.error("REDIS ERROR:", err);
+
+    if (client()) {
+      try {
+        cached = await client().get(shortCode);
+      } catch (err) {
+        console.error("REDIS ERROR:", err);
+      }
     }
 
     if (cached) {
@@ -27,7 +28,6 @@ exports.getLongUrl = async (shortCode) => {
 
     console.log("Cache MISS:", shortCode);
 
-    // fetch from DB
     return new Promise((resolve, reject) => {
       const query = "SELECT long_url FROM urls WHERE short_code=?";
 
@@ -44,12 +44,12 @@ exports.getLongUrl = async (shortCode) => {
 
         const longUrl = results[0].long_url;
 
-        console.log("Storing in Redis:", shortCode);
-
-        try {
-          await client().setEx(shortCode, 3600, longUrl);
-        } catch (err) {
-          console.error("REDIS SET ERROR:", err);
+        if (client()) {
+          try {
+            await client().setEx(shortCode, 3600, longUrl);
+          } catch (err) {
+            console.error("REDIS SET ERROR:", err);
+          }
         }
 
         resolve(longUrl);
